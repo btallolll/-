@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>لعبة المافيا | طاولة المافيا الملكية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Ambiance -->
+  <div class="bg-ambiance" id="bgAmbiance"></div>
+  <div class="fog-overlay"></div>
+
+  <!-- Audio Toggle & Top Bar -->
+  <header class="top-nav">
+    <div class="logo">
+      <span class="logo-icon">🃏</span>
+      <span class="logo-text">مافيا <span>المملكة</span></span>
+    </div>
+    <div class="nav-controls">
+      <button id="soundToggleBtn" class="icon-btn" title="تشغيل/كتم الصوت">🔊</button>
+      <button id="chatToggleBtn" class="icon-btn icon-btn-chat" title="المحادثة">
+        💬 <span id="unreadCount" class="chat-badge-num hidden">0</span>
+      </button>
+      <div id="playerBadge" class="player-badge hidden">
+        <span class="avatar-dot"></span>
+        <span id="navPlayerName">لاعب</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- SCREEN 1: WELCOME & NAME GATE -->
+  <main id="welcomeScreen" class="screen active">
+    <div class="welcome-box">
+      <div class="badge-tag">لعبة الخداع والذكاء الجماعية</div>
+      <h1 class="game-title">طاولة <span>المافيا</span></h1>
+      <p class="game-subtitle">اخبص الطبايق، واجلس حول الطاولة الدائرية، واكشف الخائن قبل فوات الأوان!</p>
+
+      <!-- Mandatory Name Input -->
+      <div class="name-gate-card">
+        <label for="playerNameInput" class="input-label">
+          <span class="icon">👤</span> أدخل اسمك أولاً للدخول إلى الطاولة:
+        </label>
+        <div class="input-wrapper">
+          <input type="text" id="playerNameInput" maxlength="15" placeholder="اكتب اسمك هنا (مثال: صقر، راكان...)" autocomplete="off">
+          <span class="input-status" id="nameStatus">⚠️ مطلوب</span>
+        </div>
+        <p class="name-warning" id="nameWarningText">يجب إدخال اسمك لتتمكن من إنشاء أو دخول أي غرفة!</p>
+      </div>
+
+      <!-- Action Cards (Disabled until name is entered) -->
+      <div class="actions-grid">
+        <!-- Card 1: Create Room -->
+        <div class="action-card disabled" id="createRoomBtnCard">
+          <div class="card-icon">👑</div>
+          <h3>إنشاء غرفة جديدة</h3>
+          <p>حدد عدد اللاعبين وعدد المافيا وخيارات كشف الهوية وشارك الرمز مع أصدقائك</p>
+          <button class="btn btn-primary" id="openCreateModalBtn" disabled>
+            + إنشاء غرفة
+          </button>
+        </div>
+
+        <!-- Card 2: Join Room -->
+        <div class="action-card disabled" id="joinRoomBtnCard">
+          <div class="card-icon">🚪</div>
+          <h3>الانضمام إلى غرفة</h3>
+          <p>أدخل رمز الغرفة المكون من 4 رموز للانضمام إلى طاولة أصدقائك</p>
+          <div class="join-input-group">
+            <input type="text" id="roomCodeInput" maxlength="4" placeholder="رمز الغرفة" uppercase disabled>
+            <button class="btn btn-secondary" id="joinRoomBtn" disabled>
+              دخول ↵
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick How to Play -->
+      <div class="rules-summary">
+        <div class="rule-item"><span>🕵️</span> <strong>المحقق:</strong> يفحص هوية مشتبه به في كل ليلة.</div>
+        <div class="rule-item"><span>💉</span> <strong>الدكتور:</strong> يحمي لاعباً، وإذا حمى المستهدف يحصل المحمي على شارة سيف البراءة!</div>
+        <div class="rule-item"><span>😈</span> <strong>المافيا:</strong> يغتالون ضحية في جنح الظلام.</div>
+        <div class="rule-item"><span>⚖️</span> <strong>التصويت:</strong> النقاش والاتفاق على إقصاء المتهم الأكبر.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: CREATE ROOM CONFIG -->
+  <div id="createRoomModal" class="modal-backdrop hidden">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h2>🛠️ إعدادات إنشاء الغرفة</h2>
+        <button class="modal-close" id="closeCreateModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Total Players -->
+        <div class="form-group">
+          <div class="label-with-val">
+            <label for="totalPlayersRange">👥 إجمالي عدد اللاعبين:</label>
+            <span class="range-val" id="totalPlayersVal">6 لاعبين</span>
+          </div>
+          <input type="range" id="totalPlayersRange" min="4" max="12" value="6" step="1">
+          <div class="range-ticks">
+            <span>4</span><span>6</span><span>8</span><span>10</span><span>12</span>
+          </div>
+        </div>
+
+        <!-- Mafia Count -->
+        <div class="form-group">
+          <div class="label-with-val">
+            <label for="mafiaCountSelect">😈 عدد القتلة (المافيا):</label>
+            <span class="range-val" id="mafiaCountVal">1 مافيا</span>
+          </div>
+          <select id="mafiaCountSelect" class="custom-select">
+            <option value="1">1 مافيا (موصى به لـ 4-7 لاعبين)</option>
+            <option value="2">2 مافيا (موصى به لـ 8-10 لاعبين)</option>
+            <option value="3">3 مافيا (موصى به لـ 11-12 لاعباً)</option>
+          </select>
+        </div>
+
+        <!-- Roles breakdown preview -->
+        <div class="roles-preview-box">
+          <div class="preview-title">توزيع الطبايق في الغرفة:</div>
+          <div class="roles-chips">
+            <div class="chip chip-mafia"><span id="previewMafia">1</span> مافيا 😈</div>
+            <div class="chip chip-doctor">1 دكتور 💉</div>
+            <div class="chip chip-detective">1 محقق 🔍</div>
+            <div class="chip chip-citizen"><span id="previewCitizens">3</span> مواطنين 👥</div>
+          </div>
+        </div>
+
+        <!-- Reveal Card on Elimination Toggle -->
+        <div class="form-group toggle-group">
+          <div class="toggle-text">
+            <strong>كشف ورقة اللاعب عند الإقصاء بالتصويت</strong>
+            <small>هل تنكشف هوية اللاعب المقال فوراً أمام الجميع أم تظل هويته سرية؟</small>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="revealOnVoteToggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <button class="btn btn-primary btn-block btn-lg" id="confirmCreateRoomBtn">
+          👑 إنشاء الغرفة والحصول على الرمز
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: LOBBY (WAITING ROOM) -->
+  <main id="lobbyScreen" class="screen hidden">
+    <div class="lobby-container">
+      
+      <!-- Top Info Card -->
+      <div class="lobby-header-card">
+        <div class="lobby-title-bar">
+          <div>
+            <span class="live-pill">● غرفة الانتظار</span>
+            <h2>طاولة اللاعبين</h2>
+          </div>
+          <button class="btn btn-outline btn-sm" id="leaveLobbyBtn">
+            🚪 مغادرة
+          </button>
+        </div>
+
+        <!-- Room Code Display -->
+        <div class="room-code-display">
+          <div class="code-label">رمز الغرفة (شاركه مع اللاعبين):</div>
+          <div class="code-box">
+            <span id="displayRoomCode">----</span>
+            <button class="btn-copy" id="copyCodeBtn" title="نسخ الرمز">📋 نسخ</button>
+            <button class="btn-copy" id="shareLinkBtn" title="مشاركة الرابط">🔗 رابط</button>
+          </div>
+        </div>
+
+        <!-- Room Settings Summary -->
+        <div class="lobby-settings-summary">
+          <div class="summary-pill">👥 السعة: <span id="lobbyPlayersCount">1</span>/<span id="lobbyMaxPlayers">6</span></div>
+          <div class="summary-pill">😈 المافيا: <span id="lobbyMafiaCount">1</span></div>
+          <div class="summary-pill">💉 دكتور: مفعّل</div>
+          <div class="summary-pill">🔍 محقق: مفعّل</div>
+          <div class="summary-pill" id="lobbyRevealPill">👁️ كشف الهوية: مفعّل</div>
+        </div>
+      </div>
+
+      <!-- Player Slots / Seats in Lobby -->
+      <div class="lobby-players-section">
+        <div class="section-header">
+          <h3>اللاعبون في الغرفة (<span id="lobbyCurrentCount">1</span>)</h3>
+          <!-- Host Actions for testing/bots -->
+          <div class="host-bot-actions hidden" id="hostBotActions">
+            <button class="btn btn-sm btn-dark" id="addBotBtn">+ إضافة بوت تجريبي 🤖</button>
+            <button class="btn btn-sm btn-dark" id="removeBotBtn">- حذف بوت</button>
+          </div>
+        </div>
+
+        <div class="lobby-players-grid" id="lobbyPlayersGrid">
+          <!-- Dynamically filled with player cards -->
+        </div>
+      </div>
+
+      <!-- Lobby Footer & Host Start Button -->
+      <div class="lobby-footer">
+        <div id="hostControls" class="host-controls hidden">
+          <button class="btn btn-primary btn-lg btn-glow" id="startGameBtn">
+            🃏 ابدأ اللعبة واخبص الطبايق
+          </button>
+          <p class="hint-text" id="hostStartHint">بانتظار اكتمال عدد اللاعبين (أو يمكنك إضافة بوتات للتجربة فوراً)</p>
+        </div>
+        <div id="guestControls" class="guest-controls hidden">
+          <div class="waiting-spinner"></div>
+          <p>بانتظار مضيف الغرفة لبدء اللعبة وخبص الطبايق...</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SCREEN 3: GAME ARENA (THE ROUND TABLE) -->
+  <main id="gameScreen" class="screen hidden">
+    
+    <!-- Game Header: Phase & Timer -->
+    <div class="game-header">
+      <div class="phase-indicator" id="phaseIndicator">
+        <span class="phase-icon" id="phaseIcon">🃏</span>
+        <div class="phase-details">
+          <h2 id="phaseTitle">توزيع الطبايق</h2>
+          <p id="phaseSubtitle">جاري خبص الطبايق وتوزيع الأدوار سرّاً...</p>
+        </div>
+      </div>
+      <div class="timer-container" id="timerContainer">
+        <div class="timer-circle">
+          <span id="timerText">--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert / Night Log Banner -->
+    <div id="nightEventBanner" class="night-event-banner hidden"></div>
+
+    <!-- THE ROUND TABLE (طاولة دائرية) -->
+    <div class="round-table-viewport">
+      <div class="round-table" id="roundTable">
+        
+        <!-- Center of Table Felt -->
+        <div class="table-center">
+          <div class="felt-logo">MAFIA</div>
+          
+          <!-- Animated Deck / Shuffle Area (خبص الطبايق) -->
+          <div class="shuffling-deck hidden" id="shufflingDeck">
+            <div class="card-stack-layer l1"></div>
+            <div class="card-stack-layer l2"></div>
+            <div class="card-stack-layer l3"></div>
+            <div class="card-stack-layer l4"></div>
+            <div class="shuffle-sparkle">✨</div>
+            <div class="shuffle-caption">جاري خبص الطبايق...</div>
+          </div>
+
+          <!-- Center Stage Action Announcement / Gavel -->
+          <div class="table-center-content" id="centerContent">
+            <div class="center-symbol" id="centerSymbol">🌙</div>
+            <div class="center-text" id="centerText">الليل خيّم على المدينة</div>
+            <button class="btn btn-warning btn-sm hidden" id="skipToVoteBtn">
+              ⚡ بدء التصويت الآن
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Circular Seats placed radially -->
+        <div class="table-seats" id="tableSeats">
+          <!-- Dynamically placed seats via trigonometrical positions -->
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- CHAT DRAWER -->
+  <aside id="chatDrawer" class="chat-drawer hidden">
+    <div class="chat-header">
+      <h3>💬 محادثة المدينة</h3>
+      <button class="modal-close" id="closeChatBtn">&times;</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-system-msg">مرحباً بكم في محادثة الطاولة. استخدموها للنقاش والتحليل!</div>
+    </div>
+    <form class="chat-input-bar" id="chatForm">
+      <input type="text" id="chatInput" placeholder="اكتب رسالتك للمدينة..." maxlength="120" autocomplete="off">
+      <button type="submit" class="btn btn-primary">إرسال</button>
+    </form>
+  </aside>
+
+  <!-- DETECTIVE INSPECTION RESULT MODAL -->
+  <div id="detectiveModal" class="modal-backdrop hidden">
+    <div class="modal-window modal-detective">
+      <div class="modal-header">
+        <h2>🔍 نتيجة فحص المحقق</h2>
+        <button class="modal-close" id="closeDetectiveModalBtn">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <h3 id="inspectTargetName" class="inspect-target-title">اللاعب: فيصل</h3>
+        
+        <div class="inspect-card-display">
+          <img id="inspectCardImg" src="/cards/citizen.png" alt="ورقة المشتبه به" class="inspect-real-card-img">
+        </div>
+
+        <div class="inspect-result-box" id="inspectResultBox">
+          <span class="inspect-stamp" id="inspectStamp">بريء</span>
+        </div>
+        <p id="inspectDetailsText">تم فحص هذا اللاعب وسحب بطاقته الحقيقية سرّاً.</p>
+        <button class="btn btn-primary btn-block" id="confirmDetectiveBtn">فهمت، احتفظ بالسر 🤫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME OVER MODAL -->
+  <div id="gameOverModal" class="modal-backdrop hidden">
+    <div class="modal-window modal-game-over">
+      <div class="modal-header text-center">
+        <h2 id="gameOverTitle">🏆 نهاية الجولة</h2>
+      </div>
+      <div class="modal-body text-center">
+        <div class="winner-trophy" id="winnerTrophy">👑</div>
+        <h1 class="winner-team-text" id="winnerTeamText">فاز المواطنون والأبرياء!</h1>
+        <p class="winner-description" id="winnerDesc">تم القضاء على جميع أعضاء عصابة المافيا بنجاح!</p>
+
+        <!-- Final Roles Reveal Table -->
+        <div class="final-reveal-section">
+          <h4>كشف جميع طبايق وأدوار اللاعبين:</h4>
+          <div class="final-roles-grid" id="finalRolesGrid"></div>
+        </div>
+
+        <!-- The two mandatory buttons requested by the user: "خروج و العب مجددا" -->
+        <div class="game-over-buttons">
+          <button class="btn btn-primary btn-lg" id="playAgainBtn">
+            🔄 العب مجدداً
+          </button>
+          <button class="btn btn-outline btn-lg" id="exitGameBtn">
+            🚪 خروج
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

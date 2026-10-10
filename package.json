@@ -1,0 +1,16 @@
+{
+  "name": "mafia-game",
+  "version": "1.0.0",
+  "description": "Mafia Card Game with Round Table and Realtime Rooms",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.4"
+  }
+}
