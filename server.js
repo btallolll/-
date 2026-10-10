@@ -108,7 +108,9 @@ function startTimer(room, durationSec, onTick, onComplete) {
   room.timer = setInterval(() => {
     room.phaseTimeLeft--;
     if (onTick) onTick(room.phaseTimeLeft);
-    broadcastRoomState(room);
+    
+    // Send lightweight timer tick to all connected players (low bandwidth, zero lag!)
+    io.to(room.code).emit('timer_tick', { timeLeft: room.phaseTimeLeft });
 
     if (room.phaseTimeLeft <= 0) {
       clearRoomTimer(room);
@@ -437,8 +439,9 @@ function startGame(room) {
 
   broadcastRoomState(room);
 
-  // 5 seconds shuffle animation on clients, then proceed to first night
-  startTimer(room, 5, null, () => {
+  // Dynamic shuffle & dealing timer so cards deal smoothly one by one and allow fullscreen card reveal
+  const shuffleSeconds = Math.max(10, Math.ceil(room.players.length * 0.8) + 5);
+  startTimer(room, shuffleSeconds, null, () => {
     startNight(room);
   });
 }

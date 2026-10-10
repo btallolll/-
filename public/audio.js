@@ -80,6 +80,36 @@ class SoundManager {
     osc.stop(now + 0.13);
   }
 
+  // Card Flip 3D Snap Effect ("صوت قلب ورقة احترافي")
+  playCardFlip() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    
+    // Crisp card snap & friction
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(1100, now);
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(380, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.08);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.24, now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.1);
+  }
+
   // Night Falls Ambiance
   playNight() {
     if (!this.enabled) return;

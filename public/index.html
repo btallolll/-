@@ -15,6 +15,280 @@
 </head>
 <body>
 
+  <!-- Animated Game Explainer Background (خلفية متحركة تشرح مراحل اللعبة كاملة بالأنيميشن) -->
+  <div class="bg-motion-explainer" id="bgMotionExplainer">
+    
+    <!-- Atmospheric Lighting & Sky -->
+    <div class="explainer-sky sky-deal" id="explainerSky"></div>
+    <div class="explainer-fog"></div>
+    <div class="explainer-spotlights">
+      <div class="spotlight sl-left"></div>
+      <div class="spotlight sl-right"></div>
+    </div>
+
+    <!-- Animated Explainer Stage Layers -->
+    <div class="explainer-stage">
+      
+      <!-- STAGE 1: DEALING CARDS & ROLES -->
+      <div class="stage-layer layer-deal active" id="layerDeal">
+        <!-- Center Ambient Shuffling Deck -->
+        <div class="deck-deal-showcase">
+          <div class="deck-glow-halo"></div>
+          <div class="animated-flying-deck">
+            <div class="card-fly f1"></div>
+            <div class="card-fly f2"></div>
+            <div class="card-fly f3"></div>
+            <div class="card-fly f4"></div>
+          </div>
+        </div>
+
+        <!-- Left Flank: Mafia & Detective Cards -->
+        <div class="stage-flank flank-left">
+          <!-- Card 1: Mafia -->
+          <div class="showcase-card sc-mafia">
+            <div class="sc-card-3d">
+              <div class="sc-card-inner">
+                <img src="/cards/card_back.png" class="sc-back" alt="ظهر الورقة">
+                <img src="/cards/mafia.png" class="sc-front" alt="بطاقة المافيا">
+              </div>
+            </div>
+            <div class="sc-info-pill pill-mafia">
+              <span class="sc-icon">😈</span>
+              <div class="sc-info-text">
+                <strong>المافيا</strong>
+                <small>اغتيال سري في جنح الليل</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Detective -->
+          <div class="showcase-card sc-detective">
+            <div class="sc-card-3d">
+              <div class="sc-card-inner">
+                <img src="/cards/card_back.png" class="sc-back" alt="ظهر الورقة">
+                <img src="/cards/detective.png" class="sc-front" alt="بطاقة المحقق">
+              </div>
+            </div>
+            <div class="sc-info-pill pill-detective">
+              <span class="sc-icon">🔍</span>
+              <div class="sc-info-text">
+                <strong>المحقق</strong>
+                <small>فحص هوية مشتبه به كل ليلة</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Flank: Doctor & Citizen Cards -->
+        <div class="stage-flank flank-right">
+          <!-- Card 3: Doctor -->
+          <div class="showcase-card sc-doctor">
+            <div class="sc-card-3d">
+              <div class="sc-card-inner">
+                <img src="/cards/card_back.png" class="sc-back" alt="ظهر الورقة">
+                <img src="/cards/doctor.png" class="sc-front" alt="بطاقة الدكتور">
+              </div>
+            </div>
+            <div class="sc-info-pill pill-doctor">
+              <span class="sc-icon">💉</span>
+              <div class="sc-info-text">
+                <strong>الدكتور</strong>
+                <small>حماية الضحية بدرع النجاة</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Citizen -->
+          <div class="showcase-card sc-citizen">
+            <div class="sc-card-3d">
+              <div class="sc-card-inner">
+                <img src="/cards/card_back.png" class="sc-back" alt="ظهر الورقة">
+                <img src="/cards/citizen.png" class="sc-front" alt="بطاقة المواطن">
+              </div>
+            </div>
+            <div class="sc-info-pill pill-citizen">
+              <span class="sc-icon">👥</span>
+              <div class="sc-info-text">
+                <strong>المواطنون</strong>
+                <small>كشف الخائن بالنقاش والتصويت</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-ambient-badge">
+          <span class="sab-sparkle">🃏</span>
+          <span>المرحلة 1: في بداية كل جولة، تُخبص الطبايق وتوزع الأدوار السرية على اللاعبين بالخفاء دون أن يراها أحد</span>
+        </div>
+      </div>
+
+      <!-- STAGE 2: NIGHT PHASE -->
+      <div class="stage-layer layer-night" id="layerNight">
+        <div class="night-moon-glow">🌙</div>
+
+        <!-- Left Flank: Doctor Shield & Detective Scan -->
+        <div class="stage-flank flank-left">
+          <!-- Doctor Shielding Action -->
+          <div class="night-action-card nac-doctor">
+            <div class="nac-visual">
+              <img src="/cards/doctor.png" class="nac-card-thumb" alt="دكتور">
+              <div class="shield-dome-pulse">
+                <span class="shield-dome-icon">🛡️</span>
+              </div>
+            </div>
+            <div class="nac-label badge-green">
+              <strong>💉 الدكتور:</strong>
+              <span>يمنح درع الحماية وإنقاذ الضحية</span>
+            </div>
+          </div>
+
+          <!-- Detective Scanning Action -->
+          <div class="night-action-card nac-detective">
+            <div class="nac-visual">
+              <img src="/cards/detective.png" class="nac-card-thumb" alt="محقق">
+              <div class="lens-scanner-beam">
+                <span class="lens-icon">🔍</span>
+                <span class="scan-radar-line"></span>
+              </div>
+            </div>
+            <div class="nac-label badge-blue">
+              <strong>🔍 المحقق:</strong>
+              <span>فحص هوية مشتبه به: [بريء ✓]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Flank: Mafia Target Elimination -->
+        <div class="stage-flank flank-right">
+          <!-- Mafia Crosshair Attack -->
+          <div class="night-action-card nac-mafia">
+            <div class="nac-visual">
+              <img src="/cards/mafia.png" class="nac-card-thumb" alt="مافيا">
+              <div class="sniper-crosshair-target">
+                <div class="crosshair-ring ring-1"></div>
+                <div class="crosshair-ring ring-2"></div>
+                <div class="crosshair-reticle">🎯</div>
+                <div class="laser-dot"></div>
+              </div>
+            </div>
+            <div class="nac-label badge-red">
+              <strong>😈 المافيا:</strong>
+              <span>تختار الضحية سرّاً لاغتيالها في الليل!</span>
+            </div>
+          </div>
+
+          <!-- Sleeping City Atmosphere Card -->
+          <div class="night-city-card">
+            <span class="city-icon">🌃</span>
+            <div class="city-text">
+              <strong>المدينة تنام في سكون الليل</strong>
+              <small>الجميع مغمضو الأعين ما عدا أصحاب القدرات</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-ambient-badge">
+          <span class="sab-sparkle">🌙</span>
+          <span>المرحلة 2: تنام المدينة ويعم الظلام؛ تستيقظ المافيا للاغتيال، بينما يتدخل الدكتور والمحقق بقدراتهم السرية!</span>
+        </div>
+      </div>
+
+      <!-- STAGE 3: DAYBREAK & DISCUSSION -->
+      <div class="stage-layer layer-day" id="layerDay">
+        <div class="day-sun-glow">☀️</div>
+
+        <!-- Left Flank: Morning Speech Bubbles -->
+        <div class="stage-flank flank-left">
+          <div class="chat-bubble-dialogue cbd-1">
+            <div class="cbd-avatar">🕵️</div>
+            <div class="cbd-content">
+              <strong>صقر (المحقق):</strong>
+              <p>الدكتور أنقذ الضحية وما مات أحد الليلة! 🛡️</p>
+            </div>
+          </div>
+          <div class="chat-bubble-dialogue cbd-2">
+            <div class="cbd-avatar">🧐</div>
+            <div class="cbd-content">
+              <strong>راكان (مواطن):</strong>
+              <p>لاحظت طارق كان متوتر وساكت بالليل! أكيد هو المافيا!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Flank: Accusations & Defense -->
+        <div class="stage-flank flank-right">
+          <div class="chat-bubble-dialogue cbd-3">
+            <div class="cbd-avatar">😨</div>
+            <div class="cbd-content">
+              <strong>طارق (المشتبه به):</strong>
+              <p>أنا مواطن بريء أقسم بالله! فيصل هو اللي يشتت الأصوات!</p>
+            </div>
+          </div>
+          <div class="chat-bubble-dialogue cbd-4">
+            <div class="cbd-avatar">⏰</div>
+            <div class="cbd-content">
+              <strong>سلطان (مواطن):</strong>
+              <p>الوقت يداهمنا.. خلونا نتفق على التصويت قبل انتهاء الوقت!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-ambient-badge">
+          <span class="sab-sparkle">☀️</span>
+          <span>المرحلة 3: شروق الصباح! يستيقظ الجميع، وتُعلن أحداث الليل ويبدأ النقاش الحماسي واستجواب المتهمين!</span>
+        </div>
+      </div>
+
+      <!-- STAGE 4: TRIAL & VOTING -->
+      <div class="stage-layer layer-vote" id="layerVote">
+        <!-- Left Flank: Gavel & Vote Counter -->
+        <div class="stage-flank flank-left">
+          <div class="gavel-box-showcase">
+            <div class="gavel-strike-icon">🔨</div>
+            <div class="gavel-soundwave"></div>
+            <div class="gavel-soundwave sw-2"></div>
+            <div class="gavel-caption">قاعة محاكمة المدينة ⚖️</div>
+          </div>
+
+          <div class="trial-votes-card">
+            <div class="tvc-header">
+              <span>أصوات الاتهام ضد المشتبه به (طارق):</span>
+              <span class="tvc-pill">5 / 6 أصوات ⚠️</span>
+            </div>
+            <div class="tvc-bar-bg">
+              <div class="tvc-bar-fill"></div>
+            </div>
+            <small class="tvc-note">تم الوصول إلى الأغلبية المطلقة للإقصاء</small>
+          </div>
+        </div>
+
+        <!-- Right Flank: Role Reveal & Victory -->
+        <div class="stage-flank flank-right">
+          <div class="elimination-reveal-card">
+            <div class="erc-badge">بطاقة المتهم المكشوفة</div>
+            <div class="erc-card-frame">
+              <img src="/cards/mafia.png" class="erc-real-card" alt="بطاقة المافيا المكشوفة">
+              <div class="erc-stamp">خائن 😈</div>
+            </div>
+            <div class="erc-status">
+              <span class="erc-crown">👑</span>
+              <strong>نجحت المدينة في كشف المافيا وإقصائه!</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-ambient-badge">
+          <span class="sab-sparkle">⚖️</span>
+          <span>المرحلة 4: يدلي الجميع بأصواتهم لإقصاء المتهم الأكبر؛ فإذا كشفتم كل المافيا انتصرت المدينة بالكامل!</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Soft edge vignette (doesn't block center content) -->
+    <div class="explainer-vignette-soft"></div>
+  </div>
+
   <!-- Background Ambiance -->
   <div class="bg-ambiance" id="bgAmbiance"></div>
   <div class="fog-overlay"></div>
@@ -42,6 +316,39 @@
 
   <!-- SCREEN 1: WELCOME & NAME GATE -->
   <main id="welcomeScreen" class="screen active">
+
+    <!-- Interactive Game Explainer Ribbon (شريط مراحل اللعبة بالأنيميشن في الخلفية) -->
+    <div class="explainer-timeline-ribbon" id="explainerTimelineRibbon">
+      <div class="ribbon-header-title">
+        <span class="ribbon-pulse-dot"></span>
+        <span class="ribbon-title-text">شرح مراحل اللعبة بالأنيميشن في الخلفية</span>
+      </div>
+      <div class="ribbon-buttons-group">
+        <button class="ribbon-phase rp-deal active" id="ribbonPhase0" data-phase="0" title="المرحلة 1: توزيع الطبايق">
+          <span class="rp-icon">🃏</span>
+          <span class="rp-text">1. توزيع الطبايق</span>
+          <span class="rp-bar"></span>
+        </button>
+        <span class="ribbon-arrow">◀</span>
+        <button class="ribbon-phase rp-night" id="ribbonPhase1" data-phase="1" title="المرحلة 2: سكون الليل">
+          <span class="rp-icon">🌙</span>
+          <span class="rp-text">2. سكون الليل</span>
+          <span class="rp-bar"></span>
+        </button>
+        <span class="ribbon-arrow">◀</span>
+        <button class="ribbon-phase rp-day" id="ribbonPhase2" data-phase="2" title="المرحلة 3: شروق الصباح">
+          <span class="rp-icon">☀️</span>
+          <span class="rp-text">3. شروق الصباح</span>
+          <span class="rp-bar"></span>
+        </button>
+        <span class="ribbon-arrow">◀</span>
+        <button class="ribbon-phase rp-vote" id="ribbonPhase3" data-phase="3" title="المرحلة 4: المحاكمة والتصويت">
+          <span class="rp-icon">⚖️</span>
+          <span class="rp-text">4. المحاكمة والتصويت</span>
+          <span class="rp-bar"></span>
+        </button>
+      </div>
+    </div>
     <div class="welcome-box">
       <div class="badge-tag">لعبة الخداع والذكاء الجماعية</div>
       <h1 class="game-title">طاولة <span>المافيا</span></h1>
@@ -53,7 +360,7 @@
           <span class="icon">👤</span> أدخل اسمك أولاً للدخول إلى الطاولة:
         </label>
         <div class="input-wrapper">
-          <input type="text" id="playerNameInput" maxlength="15" placeholder="اكتب اسمك هنا (مثال: صقر، راكان...)" autocomplete="off">
+          <input type="text" id="playerNameInput" maxlength="15" placeholder="اكتب اسمك هنا..." autocomplete="off">
           <span class="input-status" id="nameStatus">⚠️ مطلوب</span>
         </div>
         <p class="name-warning" id="nameWarningText">يجب إدخال اسمك لتتمكن من إنشاء أو دخول أي غرفة!</p>
@@ -303,6 +610,53 @@
       <button type="submit" class="btn btn-primary">إرسال</button>
     </form>
   </aside>
+
+  <!-- CINEMATIC FULLSCREEN CARD REVEAL OVERLAY ("البطاقة تصير ملء الشاشة وتنقلب وتعود للطاولة تلقائياً") -->
+  <div id="fullscreenCardRevealOverlay" class="fullscreen-reveal-backdrop hidden">
+    <div class="fs-reveal-ambient-glow" id="fsAmbientGlow"></div>
+    <div class="fs-reveal-content">
+      <div class="fs-reveal-header">
+        <div class="fs-reveal-badge">🃏 بطاقتك السرية الخاصة</div>
+        <h2 class="fs-reveal-title" id="fsRevealTitle">وصلت بطاقتك! اكشف هويتك...</h2>
+      </div>
+
+      <div class="fs-card-stage" id="fsCardStage">
+        <div class="fs-card-3d" id="fsCard3D">
+          <div class="fs-card-inner" id="fsCardInner">
+            <!-- Back Face (Face Down) -->
+            <div class="fs-card-face fs-back">
+              <img src="/cards/card_back.png" alt="مجهول" class="fs-card-img">
+              <div class="fs-tap-hint">👆 انقر للقلب فوراً</div>
+            </div>
+            <!-- Front Face (Secret Role) -->
+            <div class="fs-card-face fs-front">
+              <img id="fsCardRoleImg" src="/cards/citizen.png" alt="دورك" class="fs-card-img">
+              <div class="card-shine-effect"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Explanation & Auto-return countdown -->
+      <div class="fs-role-details" id="fsRoleDetails">
+        <div class="fs-role-header">
+          <div class="fs-role-badge-tag" id="fsRoleBadgeTag">
+            <span class="fs-role-emoji" id="fsRoleEmoji">💉</span>
+            <span class="fs-role-name-text" id="fsRoleNameText">الدكتور</span>
+          </div>
+        </div>
+        <p class="fs-role-desc" id="fsRoleDesc">تحمي أحد اللاعبين في كل ليلة سراً من اغتيال المافيا!</p>
+        
+        <div class="fs-progress-track">
+          <div class="fs-progress-fill" id="fsProgressFill"></div>
+        </div>
+
+        <button class="btn btn-primary btn-lg fs-return-btn" id="fsConfirmBtn">
+          فهمت دوري، العودة للطاولة 🤫 (<span id="fsCountdownNum">4</span>)
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- DETECTIVE INSPECTION RESULT MODAL -->
   <div id="detectiveModal" class="modal-backdrop hidden">
